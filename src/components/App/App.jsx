@@ -20,6 +20,7 @@ export class App extends Component {
     showLoadButton: false,
     // showModal: false,
   };
+
   handleFormSubmit = name => {
     this.setState({
       name,
