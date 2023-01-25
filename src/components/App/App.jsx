@@ -5,6 +5,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { fetchImages } from 'components/services/fetch';
 import { Loader } from 'components/Loader/Loader';
+import { Modal } from 'components/Modal/Modal';
+import { Button } from 'components/Button/Button';
+import { Container } from './App.styled';
 
 export class App extends Component {
   state = {
@@ -45,7 +48,7 @@ export class App extends Component {
           images: [...prevState.images, ...pictures],
         }));
         const totalPages = response.total / 12;
-        if (page > totalPages) {
+        if (page < totalPages) {
           this.setState({ showLoadButton: true });
         }
         if (images.length === 0) {
@@ -64,20 +67,20 @@ export class App extends Component {
   render() {
     const { error, loading, images, showLoadButton, modalURL } = this.state;
     return (
-      <div>
+      <Container>
         <Searchbar onSubmit={this.handleFormSubmit}></Searchbar>
         {error && <h2>{error}</h2>}
         {loading && <Loader></Loader>}
-        {modalURL.length > 0 && <div>MODALLLL</div>}
+        {modalURL.length > 0 && <Modal modalImageUrl={modalURL}></Modal>}
         <ToastContainer autoClose={3000} />
         <ImageGallery
           items={images}
           onClick={this.handleModalUrl}
         ></ImageGallery>
         {showLoadButton && (
-          <button onClick={this.isLoadMore}> Load more...</button>
+          <Button onClick={this.isLoadMore}>Load more...</Button>
         )}
-      </div>
+      </Container>
     );
   }
 }

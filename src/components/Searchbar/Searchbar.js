@@ -1,6 +1,12 @@
 import { Component } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { toast } from 'react-toastify';
+import {
+  SearchBarStyled,
+  SearchForm,
+  SearchFormButton,
+  SearchFormInput,
+} from './Searchbar.styled';
 
 export class Searchbar extends Component {
   state = { searchingName: '' };
@@ -18,15 +24,15 @@ export class Searchbar extends Component {
   };
   render() {
     return (
-      <header className="searchbar">
-        <form className="form" onSubmit={this.handleSubmit}>
-          <button type="submit" className="button">
+      <SearchBarStyled>
+        <SearchForm onSubmit={this.handleSubmit}>
+          <SearchFormButton type="submit">
             <span className="button-label">
-              <AiOutlineSearch></AiOutlineSearch>
+              <AiOutlineSearch size="48px"></AiOutlineSearch>
             </span>
-          </button>
+          </SearchFormButton>
 
-          <input
+          <SearchFormInput
             className="input"
             type="text"
             autoComplete="off"
@@ -35,8 +41,8 @@ export class Searchbar extends Component {
             value={this.state.searchingName}
             onChange={this.handleNameChange}
           />
-        </form>
-      </header>
+        </SearchForm>
+      </SearchBarStyled>
     );
   }
 }
