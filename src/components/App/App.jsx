@@ -39,43 +39,31 @@ export class App extends Component {
       page: prevState.page + 1,
     }));
   };
-  // toggleModal = largeImageUrl => {
-  //   this.setState(state => ({ showModal: !state.showModal }));
-  //   this.setState({ modalURL: largeImageUrl });
-  // };
   async componentDidUpdate(_, prevState) {
     const { name, page } = this.state;
     if (prevState.name !== name || prevState.page !== page)
       try {
-        this.setState({
-          loading: true,
-          error: null,
-          page,
-        });
+        this.setState({ loading: true, error: null });
         const response = await fetchImages({ page, name });
         const pictures = response.hits;
-        this.setState(prevState => ({
-          images: [...prevState.images, ...pictures],
-        }));
-        if (prevState.name !== name) {
-          this.setState({ images: [...pictures] });
-        }
-        const totalPages = Math.ceil(response.total / 12);
-
-        if (page > totalPages) {
-          this.setState({ showLoadButton: false });
-        }
-        if (totalPages === 0) {
+        if (pictures.length === 0) {
           toast.error('There is no images with such params', {
             theme: 'colored',
           });
+        }
+        this.setState(prevState => ({
+          images: [...prevState.images, ...pictures],
+          showLoadButton: page < Math.ceil(response.totalHits / 12),
+        }));
+
+        if (prevState.name !== name) {
           this.setState({
-            showLoadButton: false,
+            images: [...pictures],
           });
         }
-        if (page <= totalPages) {
-          this.setState({ showLoadButton: true });
-        }
+        // if (page === Math.ceil(response.totalHits / 12)) {
+        //   this.setState({ showLoadButton: false });
+        // }
       } catch (error) {
         this.setState({ error: 'We have some problems with loading...' });
       } finally {
